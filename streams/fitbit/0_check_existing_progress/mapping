@@ -1,0 +1,4 @@
+cdn, s3: ask_for_progress                        display_progress
+
+
+lambda, api:              respond_with_progress

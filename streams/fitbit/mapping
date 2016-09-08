@@ -1,0 +1,34 @@
+cdn, s3:                lambda, api:                             storage:
+
+                                                                                          - 0_check_progress
+ask_for_progress
+
+
+                        respond_with_progress
+
+display_progress
+                                                                                          - 1_authenticate
+redirect_to_fitbit
+
+store_oauth_token
+                                                                                          - 2_pull_data
+start_pull
+
+                        map_all_dates =>
+                          pull_single_date
+
+                                                                 save_to_s3
+                                                                                          - 3_transform
+
+                        =>
+                          transform_to_dynamo
+                          transform_to_redshift
+
+                                                                 save_to_s3
+
+                                                                                          - 4_save_data
+                                                                 =>
+                                                                   save_to_dynamo
+                                                                   save_to_redshift
+
+

@@ -1,0 +1,149 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Launch a generic Lambda function",
+  "Resources": {
+    "LambdaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ "lambda.amazonaws.com" ]
+            },
+            "Action": "sts:AssumeRole"
+          }]
+        }
+      }
+    },
+
+    "LambdaPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "IAMLambdaPolicy",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": ["logs:*"],
+              "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": ["kinesis:*"],
+              "Resource": "arn:aws:kinesis:*:*:*"
+            }
+          ]
+        },
+        "Roles" : [ { "Ref" : "LambdaRole" } ]
+      }
+    },
+
+    "PutToStreamLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ZipFile": { "Fn::Join": ["", [
+            "exports.handler = function(event, context) {",
+              "console.log(\"Put to stream\");",
+            "};"
+          ]]}
+        },
+        "Handler": "index.handler",
+        "Runtime": "nodejs4.3",
+        "Role": {"Fn::GetAtt": ["LambdaRole", "Arn"]}
+      }
+    },
+
+    "ReceiveFromStreamLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ZipFile": { "Fn::Join": ["", [
+            "exports.handler = function(event, context) {",
+              "console.log(event);",
+            "};"
+          ]]}
+        },
+        "Handler": "index.handler",
+        "Runtime": "nodejs4.3",
+        "Role": {"Fn::GetAtt": ["LambdaRole", "Arn"]}
+      }
+    },
+
+    "KinesisLogStream": {
+      "Type" : "AWS::Kinesis::Stream",
+      "Properties" : {
+        "ShardCount" : 1
+      }
+    },
+
+    "KinesisDeliveryStream": {
+      "Type" : "AWS::Kinesis::Stream",
+      "Properties" : {
+        "ShardCount" : 1
+      }
+    },
+
+    "KinesisRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            { "Effect": "Allow", "Principal": { "Service": [ "logs.us-west-2.amazonaws.com" ] }, "Action": [ "sts:AssumeRole" ] }
+          ]
+        }
+      }
+    },
+
+    "KinesisPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "IAMKinesisPolicy",
+        "PolicyDocument": {
+          "Statement": [
+            { "Effect": "Allow", "Action": [ "kinesis:PutRecord" ], "Resource": [ {"Fn::GetAtt": ["KinesisLogStream", "Arn"]} ] }
+          ]
+        },
+        "Roles" : [ { "Ref" : "KinesisRole" } ]
+      }
+    },
+
+    "LogGroup": {
+      "Type" : "AWS::Logs::LogGroup",
+      "Properties" : {
+        "LogGroupName" : { "Fn::Join" : [ "", [ "/aws/lambda/", { "Ref": "PutToStreamLambdaFunction" }] ] },
+        "RetentionInDays" : 1
+      }
+    },
+
+    "LogSubscription": {
+      "Type" : "AWS::Logs::SubscriptionFilter",
+      "Properties" : {
+        "DestinationArn" : {"Fn::GetAtt": ["KinesisLogStream", "Arn"]},
+        "FilterPattern" : "",
+        "LogGroupName" : { "Ref" : "LogGroup" },
+        "RoleArn": {"Fn::GetAtt": ["KinesisRole", "Arn"]}
+      }
+    },
+
+    "LogGroup2": {
+      "Type" : "AWS::Logs::LogGroup",
+      "Properties" : {
+        "LogGroupName" : { "Fn::Join" : [ "", [ "/aws/lambda/", { "Ref": "ReceiveFromStreamLambdaFunction" }] ] },
+        "RetentionInDays" : 1
+      }
+    },
+
+    "LogSubscription2": {
+      "Type" : "AWS::Logs::SubscriptionFilter",
+      "Properties" : {
+        "DestinationArn" : {"Fn::GetAtt": ["KinesisLogStream", "Arn"]},
+        "FilterPattern" : "",
+        "LogGroupName" : { "Ref" : "LogGroup2" },
+        "RoleArn": {"Fn::GetAtt": ["KinesisRole", "Arn"]}
+      }
+    }
+
+  }
+}

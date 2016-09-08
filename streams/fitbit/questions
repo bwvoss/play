@@ -1,0 +1,30 @@
+0. What does this do (from the user/feature level)?  This is really a question to understand what code makes what behavior.
+Once I understand the behavior, I want to know where the code is that implements that behavior.
+
+Usually I like to look at the code, but many times actually seeing it work in the gui is important to verify my expectation, and draw a closer link between the product and the software.
+
+ - use natural mappings for the directory structure to communicate what the system does.  If it streams fitbit data, then the directories should tell me this.
+
+ - this step sets expecations for the "How it works" question.  So as I browse the directories, there should be a conceptual model that will allow me to easily verify my expectations.
+
+ - have some way to build it and see it work in the gui, linking to specific pieces of the codebase to solidify the natural mappings.  Could do some sort of visual log?  Maybe like the network requests panel in chrome that will tell me what part of the stack is working, with what files, and with what performance statistics and data.
+
+1. How does it work/what does it do from a technological level to make this work? (closely related -- this is to make sure what you think it does is all it really does.  This means proper expectations must be set above)
+
+This can be satisfied by natural mappings as well, to show the steps/files that contain the tools used.  We're working down a structured hierarchy.
+
+2. Now that I see what pieces are used to implement a feature, How does this work with the hardware?
+
+Now that I have seen a linear order of behavior from the natural mappings of the files/directories, how does this actually get run?  So I need to make obvious what infrastructure is used, and how it cooperates.  Kind of like: http://zipkin.io/
+
+2. Then for each step, I am curious how it works, to see if my expectations are met.
+
+each step is an small, encapsulated unit.  It can be deployed and worked on totally separate from any other piece in the application.  This will aid in reducing state change on an application-wide scope, one of the major problems in testing and bugs.  Once that expectation is set, the end states must must be clearly documented and few, so the other slices will need to worry about less options in global state change.
+
+3. How can I "use" this system?
+
+
+For each step:
+For the pull data step, have to map to communicate parallel execution of lambdas
+How to share steps between directories?
+

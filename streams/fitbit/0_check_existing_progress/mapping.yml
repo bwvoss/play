@@ -1,0 +1,10 @@
+The purpose of this file is to communicate the infrastructure to code mapping configuration
+But I really want it all done via triggers/pub-sub, either SNS or S3.
+
+---
+ask_for_progress:
+
+query_progress:
+
+send_progress:
+

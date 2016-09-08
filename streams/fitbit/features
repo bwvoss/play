@@ -1,0 +1,7 @@
+Features is just for what the user sees -- the product
+
+Happy path
+
+error states:
+
+each directory can end in a success or error state, so there should be a description for each of those error states, with the details of all the errors in each step itself.

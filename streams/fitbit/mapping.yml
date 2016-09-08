@@ -1,0 +1,9 @@
+Feature:
+  check_progress:
+    CDN:
+      ask_for_progress
+    Lambda:
+      respond_with_progress
+    CDN:
+      display_progress
+  authenticate:

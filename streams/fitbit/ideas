@@ -1,0 +1,28 @@
+Constraints:
+ - 5 year old abilities for explaining
+ - needs to feel like you're just "hacking"
+ - limit scope for whole system slice, lots of complexity from environmental changes in operating of code.  Want to limit jumping around alot to see the implementation.  I need a table of contents.
+ - Don't have a dev/prodution disparity
+ - limit time and complexity of testing
+
+- each directory is a self-encapsulated thing with its own behavior and views and infrastructure that can be independently asserted upon.  Then there will be examples for how it combines with other things in the "stack".  Though I'd really like them to be like transducers, where each one will behave the same regardless of external situations.
+
+- use the logging for tests and debugging.  Start with a really good logging abstraction so you can make assertions against it, not just for behavior, but for performance and failure states.
+
+Logging is used on production to ensure correct behavior and performance and debugging.  We should use it for testing and debugging during development, and take the approach that it is a training model.
+
+- try to get it like a single hacker just getting it out quick and dirty, but the system makes sure it is quick and clean.  But keep that single developer productivity and enjoyment -- flow.
+
+- don't spend so much time on tests -- it'd be nice if the system could know for you.  Instead, have it run through the whole thing with different workloads and you confirm if the behavior is good.  The code can look at the logsto determine a pattern of behavior and you specify the side-effects that are correct.  On future changes, just run it and it will see if the end results were the same.  Like a training model.
+
+People do this in the beginning because it is easy, and writing tests is both difficult and time-consuming.  But all people can take a look at the results and simply say "yes" or "no".
+
+A possible approach:
+
+- Hack the shit out of some code -- a vertical slice, have it observed heavily by default.
+
+Potential problems:
+
+slow feedback.  If something goes wrong, then how can I quickly debug everything? -- great, obvious feedback, and use caching of infrastructure parts, with option for concurrency
+I need to make sure it logs incredibly well, and presents that data in a way to make it obvious what occured and in what order.  Because it takes longer, it has to be totally complete.
+
