@@ -1,0 +1,31 @@
+{
+    "nextForwardToken": "f/32878486697589612327571733107195034107455902170731708419", 
+    "events": [
+        {
+            "ingestionTime": 1474322333374, 
+            "timestamp": 1474322333351, 
+            "message": "2016-09-19T21:58:53.350Z\tundefined\tLoading function\n"
+        }, 
+        {
+            "ingestionTime": 1474322348423, 
+            "timestamp": 1474322333352, 
+            "message": "START RequestId: de5ce150-b365-46c1-95a2-b25cdad218c4 Version: $LATEST\n"
+        }, 
+        {
+            "ingestionTime": 1474322348423, 
+            "timestamp": 1474322333360, 
+            "message": "2016-09-19T21:58:53.359Z\tde5ce150-b365-46c1-95a2-b25cdad218c4\tDecoded payload: I am the test event.\n"
+        }, 
+        {
+            "ingestionTime": 1474322348423, 
+            "timestamp": 1474322333397, 
+            "message": "END RequestId: de5ce150-b365-46c1-95a2-b25cdad218c4\n"
+        }, 
+        {
+            "ingestionTime": 1474322348423, 
+            "timestamp": 1474322333397, 
+            "message": "REPORT RequestId: de5ce150-b365-46c1-95a2-b25cdad218c4\tDuration: 8.47 ms\tBilled Duration: 100 ms \tMemory Size: 128 MB\tMax Memory Used: 14 MB\t\n"
+        }
+    ], 
+    "nextBackwardToken": "b/32878486696563778048439324424491511322261132129806778368"
+}

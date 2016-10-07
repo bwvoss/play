@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Launch a generic Lambda function",
+  "Description": "Testing the abilities of AWS and Cloudformation",
   "Resources": {
     "LambdaRole": {
       "Type": "AWS::IAM::Role",
@@ -27,6 +27,11 @@
               "Effect": "Allow",
               "Action": ["logs:*"],
               "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": ["lambda:InvokeFunction"],
+              "Resource": "*"
             },
             {
               "Effect": "Allow",
@@ -89,9 +94,13 @@
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
-          "Statement": [
-            { "Effect": "Allow", "Principal": { "Service": [ "logs.us-west-2.amazonaws.com" ] }, "Action": [ "sts:AssumeRole" ] }
-          ]
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ { "Fn::Join" : [ "", [ "logs.",  { "Ref": "AWS::Region" }, ".amazonaws.com"] ] }]
+            },
+            "Action": [ "sts:AssumeRole" ]
+          }]
         }
       }
     },

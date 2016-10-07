@@ -32,13 +32,26 @@ help:
 
 # exports.handler = function(event, context) {
     # var kinesis = new AWS.Kinesis();
-    # var params = {
-    # StreamName: 'myteststack-KinesisStream-FBHMM7K6OOF7', /* required */
-    # ExclusiveStartShardId: 'shardId-000000000000',
-     # Limit: 1
-    # };
-    # kinesis.describeStream(params, function(err, data) {
-     # if (err) context.fail(err, err.stack); // an error occurred
-     # else     console.log(data);           // successful response
+		# var params = {
+			# Data: 'I am the test event.',
+			# PartitionKey: 'shardId-000000000000',
+			# StreamName: 'STRING_VALUE' # use the kinesis arn KinesisDeliveryStream
+		# };
+		# kinesis.putRecord(params, function(err, data) {
+			# if (err) console.log(err, err.stack); // an error occurred
+			# else     console.log(data);           // successful response
+		# });
+# };
+
+# Receiving Function
+# console.log('Loading function');
+
+# exports.handler = function(event, context, callback) {
+    # //console.log(JSON.stringify(event, null, 2));
+    # event.Records.forEach(function(record) {
+        # // Kinesis data is base64 encoded so decode here
+        # var payload = new Buffer(record.kinesis.data, 'base64').toString('ascii');
+        # console.log('Decoded payload:', payload);
     # });
+    # callback(null, "message");
 # };
